@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
@@ -168,6 +168,26 @@
       font-size: 14px;
       color: var(--ink-muted);
     }
+
+    #feedback-form > p,
+    #feedback-form > ul {
+      color: var(--ink);
+    }
+
+    #feedback-form > ul {
+      padding-left: 1.25rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1.25rem;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--ink-muted);
+    }
+
+    #feedback-form > p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 0.25rem;
+    }
   </style>
 </head>
 <body>
@@ -175,13 +195,24 @@
   <div id="form-area">
     <div class="header">
       <span class="label-chip">Feedback</span>
-      <h1>Uzsgyi</h1>
+      <h1>Uzsgyi - Visszajelzés</h1>
     </div>
 
     <form id="feedback-form" action="https://formspree.io/f/xaqaebnk" method="POST">
+      <p>
+        Kérlek oszd meg véleményedet az alkalmazással kapcsolatban.<br />
+        Például:
+      </p>
+      <ul>
+        <li>Mi tetszik?</li>
+        <li>Mi nem tetszik?</li>
+        <li>Melyik funkció tetszik?</li>
+        <li>Melyik funkciót tartod feleslegesnek?</li>
+        <li>Milyen funkciót látnál még az alkalmazásban?</li>
+      </ul>
       <div class="field">
         <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" placeholder="kecske@mail.com" required />
+        <input id="email" name="email" type="email" placeholder="nyinyifox@mail.com" required />
       </div>
       <div class="field">
         <label for="message">Feedback</label>
