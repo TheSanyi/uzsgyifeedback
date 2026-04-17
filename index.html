@@ -41,8 +41,13 @@
     }
 
     .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 2rem;
     }
+
+    .header-left { flex: 1; }
 
     .label-chip {
       display: inline-block;
@@ -70,6 +75,34 @@
       font-size: 14px;
       color: var(--ink-muted);
       line-height: 1.6;
+    }
+
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--ink-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent-light);
+      color: var(--accent);
     }
 
     .field {
@@ -169,12 +202,15 @@
       color: var(--ink-muted);
     }
 
-    #feedback-form > p,
-    #feedback-form > ul {
+    .lang-block { display: none; }
+    .lang-block.visible { display: block; }
+
+    .lang-block p,
+    .lang-block ul {
       color: var(--ink);
     }
 
-    #feedback-form > ul {
+    .lang-block ul {
       padding-left: 1.25rem;
       margin-top: 0.5rem;
       margin-bottom: 1.25rem;
@@ -183,7 +219,7 @@
       color: var(--ink-muted);
     }
 
-    #feedback-form > p {
+    .lang-block p {
       font-size: 14px;
       line-height: 1.6;
       margin-bottom: 0.25rem;
@@ -194,49 +230,113 @@
 <div class="card">
   <div id="form-area">
     <div class="header">
-      <span class="label-chip">Feedback</span>
-      <h1>Uzsgyi - Visszajelzés</h1>
+      <div class="header-left">
+        <span class="label-chip" id="label-chip">Visszajelzés</span>
+        <h1 id="page-title">Uzsgyi</h1>
+      </div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('hu')">HU</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
     </div>
 
     <form id="feedback-form" action="https://formspree.io/f/xaqaebnk" method="POST">
-      <p>
-        Kérlek oszd meg véleményedet az alkalmazással kapcsolatban.<br />
-        Például:
-      </p>
-      <ul>
-        <li>Mi tetszik?</li>
-        <li>Mi nem tetszik?</li>
-        <li>Melyik funkció tetszik?</li>
-        <li>Melyik funkciót tartod feleslegesnek?</li>
-        <li>Milyen funkciót látnál még az alkalmazásban?</li>
-      </ul>
+      <div class="lang-block visible" id="lang-hu">
+        <p>
+          Kérlek oszd meg véleményedet az alkalmazással kapcsolatban.<br />
+          Például:
+        </p>
+        <ul>
+          <li>Mi tetszik?</li>
+          <li>Mi nem tetszik?</li>
+          <li>Melyik funkció tetszik?</li>
+          <li>Melyik funkciót tartod feleslegesnek?</li>
+          <li>Milyen funkciót látnál még az alkalmazásban?</li>
+        </ul>
+      </div>
+      <div class="lang-block" id="lang-en">
+        <p>
+          Please share your feedback about the app.<br />
+          For example:
+        </p>
+        <ul>
+          <li>What do you like?</li>
+          <li>What do you dislike?</li>
+          <li>Which feature do you like the most?</li>
+          <li>Which feature do you find unnecessary?</li>
+          <li>What feature would you like to see in the app?</li>
+        </ul>
+      </div>
       <div class="field">
         <label for="email">E-mail</label>
         <input id="email" name="email" type="email" placeholder="nyinyifox@mail.com" required />
       </div>
       <div class="field">
-        <label for="message">Feedback</label>
+        <label id="label-message" for="message">Feedback</label>
         <textarea id="message" name="message" required></textarea>
       </div>
-      <button type="submit">Küldés</button>
+      <button type="submit" id="btn-submit">Küldés</button>
     </form>
 
-    <p class="footer-note">Az adataidat bizalmasan kezeljük.</p>
+    <p class="footer-note" id="footer-note">Az adataidat bizalmasan kezeljük.</p>
   </div>
 
   <div class="success-msg" id="success">
     <div class="success-icon">✓</div>
-    <h2>Köszönjük!</h2>
-    <p>Megkaptuk visszajelzésedet.<br>Hamarosan válaszolunk.</p>
+    <h2 id="success-title">Köszönjük!</h2>
+    <p id="success-body">Megkaptuk visszajelzésedet.<br>Hamarosan válaszolunk.</p>
   </div>
 </div>
 
 <script>
+  const translations = {
+    hu: {
+      chip: 'Visszajelzés',
+      title: 'Uzsgyi',
+      submit: 'Küldés',
+      submitting: 'Küldés...',
+      error: 'Hiba történt, próbáld újra',
+      footerNote: 'Az adataidat bizalmasan kezeljük.',
+      successTitle: 'Köszönjük!',
+      successBody: 'Megkaptuk visszajelzésedet.<br>Hamarosan válaszolunk.',
+    },
+    en: {
+      chip: 'Feedback',
+      title: 'Uzsgyi',
+      submit: 'Send',
+      submitting: 'Sending...',
+      error: 'Something went wrong, please try again',
+      footerNote: 'Your data is handled confidentially.',
+      successTitle: 'Thank you!',
+      successBody: 'We received your feedback.<br>We\'ll get back to you soon.',
+    }
+  };
+
+  let currentLang = 'hu';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.getElementById('lang-hu').classList.toggle('visible', lang === 'hu');
+    document.getElementById('lang-en').classList.toggle('visible', lang === 'en');
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+    });
+    const t = translations[lang];
+    document.getElementById('label-chip').textContent = t.chip;
+    document.getElementById('page-title').textContent = t.title;
+    const btn = document.getElementById('btn-submit');
+    if (!btn.disabled) btn.textContent = t.submit;
+    document.getElementById('footer-note').textContent = t.footerNote;
+    document.getElementById('success-title').textContent = t.successTitle;
+    document.getElementById('success-body').innerHTML = t.successBody;
+  }
+
   const form = document.getElementById('feedback-form');
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const btn = form.querySelector('button');
-    btn.textContent = 'Küldés...';
+    const btn = document.getElementById('btn-submit');
+    const t = translations[currentLang];
+    btn.textContent = t.submitting;
     btn.disabled = true;
     try {
       const res = await fetch(form.action, {
@@ -248,11 +348,11 @@
         document.getElementById('form-area').style.display = 'none';
         document.getElementById('success').style.display = 'block';
       } else {
-        btn.textContent = 'Hiba történt, próbáld újra';
+        btn.textContent = t.error;
         btn.disabled = false;
       }
     } catch {
-      btn.textContent = 'Hiba történt, próbáld újra';
+      btn.textContent = t.error;
       btn.disabled = false;
     }
   });
